@@ -126,14 +126,15 @@ function renderRight(pane, context, state, mapState) {
             innerTemplate.id = "analysis-area"
             innerTemplate.innerHTML = "Loading."
             pane.pane.append(innerTemplate);
-
+            console.log(data);
             let analyzer = new Analyzer(state, mapState, innerTemplate);
             analyzer.addRevealSection("Basics", (uiState, dispatch) => overview_section(state, data.contiguity, data.split, data.num_units))
             analyzer.addRevealSection("Election Results and Proportionality", (uiState, dispatch) => election_section(state))
             analyzer.addRevealSection("Compactness", (uiState, dispatch) => compactness_section(state, data.cut_edges, data.polsbypopper))
             data.counties == -1 ? "" : 
-                analyzer.addRevealSection(municipalities ? "Municipality Splits" : "County Splits", 
-                    (uiState, dispatch) => county_section(state, data.counties, municipalities))
+                analyzer.addRevealSection("County Splits", (uiState, dispatch) => county_section(state, data.counties, false))
+            data.municipalities == -1 ? "" :
+                analyzer.addRevealSection("Municipality Splits", (uiState, dispatch) => county_section(state, data.municipalities, true))
             analyzer.render();
         });
 }
